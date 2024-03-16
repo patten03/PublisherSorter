@@ -108,8 +108,20 @@ void createSortedFile(const std::string& file)
 {
 	sortingSettings settings = setNewFile(file);
 	std::vector<book> books = readFile(file);
+
+	for (book knizhentsyya : books) {
+		std::cout << knizhentsyya.name << std::endl;
+	}
+	std::cout << std::endl;
+
 	insertionSort(books, settings);
 
+	for (book knizhentsyya : books) {
+		std::cout << knizhentsyya.year << std::endl;
+	}
+
+	int i;
+	i = 1;
 }
 
 sortingSettings setNewFile(const std::string& file)
@@ -229,37 +241,74 @@ book splitRow(std::string row)
 	return res;
 }
 
-void insertionSort(std::vector<book> books, sortingSettings set) {
-	//for (int counter = 0; counter < books.size(); counter++) {
-	//	book currentBook = books[counter];
-	//	int j = counter - 1;
-	//	while (j >= 0 && books[j] > currentBook) {
-	//		books[j + 1] = books[j];
-	//		j--;
-	//	}
-	//	books[j + 1] = currentBook;
-	//}
+void insertionSort(std::vector<book> &books, sortingSettings set) {
+	for (int counter = 0; counter < books.size(); counter++) {
+		book currentBook = books[counter];
+		int j = counter - 1;
+		while (j >= 0 && naturalComparisonGreater(books[j], currentBook, set)) {
+			books[j + 1] = books[j];
+			j--;
+		}
+		books[j + 1] = currentBook;
+	}
 }
 
 //@return равносильно знаку >
-bool naturalComparisonGreater(std::string str1, std::string str2) { 
+bool naturalComparisonGreater(book book1, book book2, sortingSettings set) {
 	bool res (false);
 
-	for (int i(0); i < minimum(str1.size(), str2.size()) + 1; i++) {
-		if (str1[i] != str2[i]) {
-			res = str1[i] > str2[i];
-			break;
-		}
+	std::string str1, str2;
+
+	//Передача поля, по которому идет сортировка
+	switch (set.field) {
+	case name: {
+		str1 = book1.name;
+		str2 = book2.name;
+		break;
+	}
+	case kind: {
+		str1 = book1.kind;
+		str2 = book2.kind;
+		break;
+	}
+	case organization: {
+		str1 = book1.organization;
+		str2 = book2.organization;
+		break;
+	}
+	case year: {
+		str1 = book1.year;
+		str2 = book2.year;
+		break;
+	}
+	case address: {
+		str1 = book1.address;
+		str2 = book2.address;
+		break;
+	}
+	case surname: {
+		str1 = book1.surname;
+		str2 = book2.surname;
+		break;
+	}
+	defautl: break;
 	}
 	
-	return res;
-}
+	if (str1 == "None")
+		return true; // чтобы всегда данное поле было внизу
+	if (str2 == "None")
+		return false; // чтобы всегда данное поле было внизу
 
-int minimum(int num1, int num2) {
-	if (num1 > num2)
-		return num2;
+	// лексикографическое сравнение
+	res = std::lexicographical_compare(
+		str1.begin(), str1.end(),
+		str2.begin(), str2.end());
+
+	// настройка для сортировки в обратном порядке
+	if (set.isReversed)
+		return res;
 	else
-		return num1;
+		return !res;
 }
 
 void checkSpecialSymbols(const std::string& word) {

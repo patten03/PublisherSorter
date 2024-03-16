@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include "DirWork.h"
 
 enum typeField {
@@ -46,10 +47,8 @@ sortingSettings setNewFile(const std::string& file);
 void fixFile(const std::string& file);
 std::vector<book> readFile(const std::string& file);
 book splitRow(std::string row);
-void insertionSort(std::vector<book> books, sortingSettings set);
-bool naturalComparisonGreater(std::string str1, std::string str2);
-
-int minimum(int num1, int num2);
+void insertionSort(std::vector<book>& books, sortingSettings set);
+bool naturalComparisonGreater(book book1, book book2, sortingSettings set);
 
 void standartSettings();
 
