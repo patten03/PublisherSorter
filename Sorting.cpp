@@ -110,18 +110,15 @@ void createSortedFile(const std::string& file)
 	std::vector<book> books = readFile(file);
 
 	for (book knizhentsyya : books) {
-		std::cout << knizhentsyya.name << std::endl;
+		std::cout << knizhentsyya.address << std::endl;
 	}
 	std::cout << std::endl;
 
 	insertionSort(books, settings);
 
 	for (book knizhentsyya : books) {
-		std::cout << knizhentsyya.year << std::endl;
+		std::cout << knizhentsyya.address << std::endl;
 	}
-
-	int i;
-	i = 1;
 }
 
 sortingSettings setNewFile(const std::string& file)
