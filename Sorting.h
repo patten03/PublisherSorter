@@ -50,6 +50,10 @@ book splitRow(std::string row);
 void insertionSort(std::vector<book>& books, sortingSettings set);
 bool naturalComparisonGreater(book book1, book book2, sortingSettings set);
 
+std::string headerRow();
+std::string row(const book& doc);
+
+
 void standartSettings();
 
 #endif // !SORTING

@@ -53,16 +53,14 @@ void menu() {
 	}
 }
 
-void ask(const std::vector<std::string> choice)
-{
+void ask(const std::vector<std::string> choice) {
 	for (int i(0); i < choice.size(); i++)
 	{
 		std::cout << i + 1 << ". " << choice[i] << std::endl;
 	}
 }
 
-int inputChoice(const int& end)
-{
+int inputChoice(const int& end) {
 	int choiceInt = _getch();
 
 	// цикл прерывается только при нажатии клавиши от 1 до <end>
@@ -74,8 +72,7 @@ int inputChoice(const int& end)
 	return choiceInt;
 }
 
-std::string askString(const std::string& question)
-{
+std::string askString(const std::string& question) {
 	std::string res;
 	std::cout << question << std::endl;
 
@@ -104,21 +101,56 @@ std::string askString(const std::string& question)
 	return res;
 }
 
-void createSortedFile(const std::string& file)
-{
+void createSortedFile(const std::string& file) {
 	sortingSettings settings = setNewFile(file);
 	std::vector<book> books = readFile(file);
-
-	for (book knizhentsyya : books) {
-		std::cout << knizhentsyya.address << std::endl;
-	}
-	std::cout << std::endl;
-
 	insertionSort(books, settings);
 
-	for (book knizhentsyya : books) {
-		std::cout << knizhentsyya.address << std::endl;
+	std::fstream res;
+	res.open(settings.name + ".html", std::ios_base::out);
+
+	std::string top("<!DOCTYPE html><html><body><style> table, th, td{border:1px solid black;}</style><table>");
+	//top = top + "<body><h2>" + "Сортировка по полю" + "</h2></body>";
+	////top = top + ;
+	res << top << headerRow();
+
+	for (auto const& curBook : books) {
+		res << row(curBook) << std::endl;
 	}
+
+	std::string floor("</table></body>");
+	res << floor;
+
+	res.close();
+
+	std::cout << "Ваш файл под названием " << settings.name << ".html" << " был создан" << std::endl;
+}
+
+std::string row(const book & doc) {
+
+	std::string res;
+	res = res + "<tr>";
+	res = res + "<td>" + doc.name + "</td>";
+	res = res + "<td>" + doc.kind + "</td>";
+	res = res + "<td>" + doc.organization + "</td>";
+	res = res + "<td>" + doc.year + "</td>";
+	res = res + "<td>" + doc.address + "</td>";
+	res = res + "<td>" + doc.surname + "</td>";
+	res = res + "</tr>";
+
+	return res;
+}
+
+std::string headerRow()
+{
+	std::string res;
+	res = res + "<th>" + "Название издания" + "</th>";
+	res = res + "<th>" + "Вид издания" + "</th>";
+	res = res + "<th>" + "Издающая организация" + "</th>";
+	res = res + "<th>" + "Год издания" + "</th>";
+	res = res + "<th>" + "Адресс редакции" + "</th>";
+	res = res + "<th>" + "Фамилия главного редактора" + "</th>" + "\n";
+	return res;
 }
 
 sortingSettings setNewFile(const std::string& file)
