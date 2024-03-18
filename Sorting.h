@@ -51,7 +51,11 @@ void insertionSort(std::vector<book>& books, sortingSettings set);
 bool naturalComparisonGreater(book book1, book book2, sortingSettings set);
 
 std::string headerRow();
+std::string headerRow(typeField mainField);
 std::string row(const book& doc);
+std::string row(const book& doc, typeField mainField);
+
+std::string swapFields(std::vector<std::string> fieldList, typeField mainField);
 
 
 void standartSettings();

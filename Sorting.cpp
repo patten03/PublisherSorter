@@ -109,13 +109,31 @@ void createSortedFile(const std::string& file) {
 	std::fstream res;
 	res.open(settings.name + ".html", std::ios_base::out);
 
-	std::string top("<!DOCTYPE html><html><body><style> table, th, td{border:1px solid black;}</style><table>");
-	//top = top + "<body><h2>" + "Сортировка по полю" + "</h2></body>";
-	////top = top + ;
-	res << top << headerRow();
+	std::string top("<!DOCTYPE html><html>");
+
+	std::string fieldName;
+	switch (settings.field) {
+	case name: fieldName = "НИЗДАНИЯ"; break;
+	case kind: fieldName = "ВИД ИЗДАНИЯ"; break;
+	case organization: fieldName = "ИЗДАЮЩАЯ ОРГАНИЗАЦИЯ"; break;
+	case year: fieldName = "ГОД ИЗДАНИЯ"; break;
+	case address: fieldName = "АДРЕС РЕДАКЦИИ"; break;
+	case surname: fieldName = "ФАМИЛИЯ ГЛАВНОГО РЕДАКТОРА"; break;
+	}
+
+	std::string direction;
+	switch (settings.isReversed) {
+	case false: direction = "по ВОЗРАСТАНИЮ"; break;
+	case true: direction ="по УБЫВАНИЮ"; break;
+	}
+
+	top = top + "<body><h2>" + "Сортировка по полю " + fieldName + " " + direction + "</h2>";
+	top = top + "<style> table, th, td{ border:1px solid black; }</style><table>";
+
+	res << top << headerRow(settings.field);
 
 	for (auto const& curBook : books) {
-		res << row(curBook) << std::endl;
+		res << row(curBook, settings.field) << std::endl;
 	}
 
 	std::string floor("</table></body>");
@@ -127,7 +145,6 @@ void createSortedFile(const std::string& file) {
 }
 
 std::string row(const book & doc) {
-
 	std::string res;
 	res = res + "<tr>";
 	res = res + "<td>" + doc.name + "</td>";
@@ -141,8 +158,7 @@ std::string row(const book & doc) {
 	return res;
 }
 
-std::string headerRow()
-{
+std::string headerRow() {
 	std::string res;
 	res = res + "<th>" + "Название издания" + "</th>";
 	res = res + "<th>" + "Вид издания" + "</th>";
@@ -153,8 +169,72 @@ std::string headerRow()
 	return res;
 }
 
-sortingSettings setNewFile(const std::string& file)
-{
+std::string row(const book& doc, typeField mainField) {
+
+	std::vector<std::string> fieldList{
+		doc.name,
+		doc.kind,
+		doc.organization,
+		doc.year,
+		doc.address,
+		doc.surname
+	};
+
+	std::string res;
+	fieldList[0].swap(fieldList[mainField - 1]);
+
+	res = res + "<tr>";
+	for (auto line : fieldList) {
+		res = res + "<td>" + line + "</td>";
+	}
+	res = res + "</tr>\n";
+
+	//res = res + "<tr>";
+	//res = res + "<td>" + doc.name + "</td>";
+	//res = res + "<td>" + doc.kind + "</td>";
+	//res = res + "<td>" + doc.organization + "</td>";
+	//res = res + "<td>" + doc.year + "</td>";
+	//res = res + "<td>" + doc.address + "</td>";
+	//res = res + "<td>" + doc.surname + "</td>";
+	//res = res + "</tr>";
+
+	return res;
+}
+
+std::string headerRow(typeField mainField) {
+	std::vector<std::string> fieldList{
+		"Название издания",
+		"Вид издания",
+		"Издающая организация",
+		"Год издания",
+		"Адрес редакции",
+		"Фамилия главного редактора"
+	};
+
+	std::swap(fieldList[0], fieldList[mainField - 1]);
+
+	std::string res;
+	for (auto line : fieldList) {
+		res = res + "<th>" + line + "</th>";
+	}
+	res = res + "\n";
+
+	return res;
+}
+
+std::string swapFields(std::vector<std::string> fieldList, typeField mainField) {
+	fieldList[0].swap(fieldList[mainField - 1]);
+
+	std::string res;
+	for (auto line : fieldList) {
+		res = res + "<th>" + line + "</th>";
+	}
+	res = res + "\n";
+
+	return res;
+}
+
+sortingSettings setNewFile(const std::string& file) {
 	sortingSettings res;
 
 	std::cout << "Выберите поле, по которому будете сортировать таблицу:" << std::endl;
@@ -335,9 +415,9 @@ bool naturalComparisonGreater(book book1, book book2, sortingSettings set) {
 
 	// настройка для сортировки в обратном порядке
 	if (set.isReversed)
-		return res;
-	else
 		return !res;
+	else
+		return res;
 }
 
 void checkSpecialSymbols(const std::string& word) {
