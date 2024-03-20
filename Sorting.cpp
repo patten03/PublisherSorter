@@ -258,6 +258,8 @@ sortingSettings setNewFile(const std::string& file) {
 	res.isReversed = bool(inputChoice(direction.size()) - 1);
 
 	res.name = askString("¬ведите название файла");
+	res.name = res.name + "_" + currentTime() + "_{s}";
+	space2underscore(res.name);
 
 	return res;
 }
@@ -402,10 +404,10 @@ bool naturalComparisonGreater(book book1, book book2, sortingSettings set) {
 	}
 	defautl: break;
 	}
-	
-	if (str1 == "None")
+	std::string empty = "None";
+	if (str1 == empty)
 		return true; // чтобы всегда данное поле было внизу
-	if (str2 == "None")
+	if (str2 == empty)
 		return false; // чтобы всегда данное поле было внизу
 
 	// лексикографическое сравнение

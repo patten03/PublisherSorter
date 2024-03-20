@@ -84,13 +84,22 @@ void fileChoice(int begCoord, std::vector<std::string> files, int& cur, std::str
 	}
 }
 
+bool isSorted(const std::string& filename) {
+	bool res(false);
+	// нахождение метки в названии файла
+	if (filename.find("{s}") != -1)
+		res = true;
+	return res;
+}
+
 void makeFilesList(std::string filepath, std::vector<std::string>& folderList)
 {
 	for (auto const& dirFolder : std::filesystem::directory_iterator(filepath + "\\"))
 	{
-		// цикл сохраняет файлы с метками
+		// цикл сохраняет файлы html без меток {s}
 		if ((dirFolder.is_regular_file()
-			and dirFolder.path().extension() == ".html"))
+			and dirFolder.path().extension() == ".html")
+			and !isSorted(dirFolder.path().string()))
 		{
 			std::string path = dirFolder.path().string();
 			path = path.substr(path.rfind("\\") + 1, path.size());
