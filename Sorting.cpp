@@ -1,7 +1,6 @@
 #include "Sorting.h"
 
-void standartSettings()
-{
+void standartSettings() {
 	// установка русской кодировки для консоли
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
@@ -54,8 +53,7 @@ void menu() {
 }
 
 void ask(const std::vector<std::string> choice) {
-	for (int i(0); i < choice.size(); i++)
-	{
+	for (int i(0); i < choice.size(); i++) {
 		std::cout << i + 1 << ". " << choice[i] << std::endl;
 	}
 }
@@ -77,23 +75,19 @@ std::string askString(const std::string& question) {
 	std::cout << question << std::endl;
 
 	bool approved(false); // переменная цикла, становится true когда строка введена без ошибок
-	while (!approved)
-	{
-		try
-		{
+	while (!approved) {
+		try {
 			std::cout << ">>";
 			std::getline(std::cin, res);
 			checkSpecialSymbols(res); // запрет на ввод символов \/:*?<>"|
 			if (res != "")
 				approved = true;
-			else
-			{
+			else {
 				system("cls");
 				std::cout << question << std::endl;
 			}
 		}
-		catch (std::exception& ex)
-		{
+		catch (std::exception& ex) {
 			std::cout << ex.what() << std::endl;
 		}
 	}
@@ -264,8 +258,7 @@ sortingSettings setNewFile(const std::string& file) {
 	return res;
 }
 
-void fixFile(const std::string& file)
-{
+void fixFile(const std::string& file) {
 	std::fstream raw, fixed;
 	raw.open(file, std::ios_base::in);
 
@@ -300,8 +293,7 @@ void fixFile(const std::string& file)
 	}
 }
 
-std::vector<book> readFile(const std::string& file)
-{
+std::vector<book> readFile(const std::string& file) {
 	std::vector<book> res;
 
 	std::fstream fileStream;
@@ -321,8 +313,7 @@ std::vector<book> readFile(const std::string& file)
 	return res;
 }
 
-book splitRow(std::string row)
-{
+book splitRow(std::string row) {
 	book res;
 
 	int beg, end;
@@ -334,8 +325,7 @@ book splitRow(std::string row)
 	std::string buff[6];
 
 	//разделение строки по <td> и </td>
-	for (auto& field : buff)
-	{
+	for (auto& field : buff) {
 		field = row.substr(leftEdge, end - beg);
 		row.erase(0, end + rigthEdge);
 		
@@ -424,8 +414,7 @@ bool naturalComparisonGreater(book book1, book book2, sortingSettings set) {
 
 void checkSpecialSymbols(const std::string& word) {
 	std::string forbiddenSymbols("\\/:*?<>\"|");
-	for (int i(0); i < forbiddenSymbols.size(); i++)
-	{
+	for (int i(0); i < forbiddenSymbols.size(); i++) {
 		if (word.find(forbiddenSymbols[i]) != -1)
 			throw std::invalid_argument("Файл не может содержать \\/:*?<>\"|");
 	}

@@ -1,7 +1,6 @@
 ﻿#include "Sorting.h"
 
-int main()
-{
+int main() {
     standartSettings();
     menu();
 
