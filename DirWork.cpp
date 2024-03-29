@@ -156,10 +156,11 @@ std::string currentTime() {
 
 	std::string clockTime;
 
-	clockTime = formatXX(now.tm_hour) + "_"
-		+ formatXX(now.tm_min);
+	clockTime = formatXX(now.tm_hour) + "-"
+		+ formatXX(now.tm_min) + "-"
+		+ formatXX(now.tm_sec);
 
-	res = clockTime + "_" + date;
+	res = date + "--" + clockTime;
 	return res;
 }
 
