@@ -17,7 +17,7 @@ void menu() {
 		<< "- Издающая организация;" << std::endl
 		<< "- Год издания;" << std::endl
 		<< "- Адрес редакции;" << std::endl
-		<< "- Фамилия главного редактора;" << std::endl 
+		<< "- Фамилия главного редактора;" << std::endl
 		<< "Сортировка может происходить как по возрастанию, так и по убыванию" << std::endl << std::endl
 
 		<< "Для работы с файлами они должны находится в той же директории, что и программа" << std::endl << std::endl;
@@ -34,7 +34,8 @@ void menu() {
 
 		std::string file;
 		switch (choice) {
-		case 1: {
+		case 1:
+		{
 			file = findFile("Выберите файл:");
 			if (file != "") {
 				fixFile(file);
@@ -42,7 +43,8 @@ void menu() {
 			}
 			break;
 		}
-		case 2: {
+		case 2:
+		{
 			quit = true;
 			break;
 		}
@@ -107,7 +109,7 @@ void createSortedFile(const std::string& file) {
 
 	std::string fieldName;
 	switch (settings.field) {
-	case name: fieldName = "НИЗДАНИЯ"; break;
+	case name: fieldName = "НАЗВАНИЕ ИЗДАНИЯ"; break;
 	case kind: fieldName = "ВИД ИЗДАНИЯ"; break;
 	case organization: fieldName = "ИЗДАЮЩАЯ ОРГАНИЗАЦИЯ"; break;
 	case year: fieldName = "ГОД ИЗДАНИЯ"; break;
@@ -118,7 +120,7 @@ void createSortedFile(const std::string& file) {
 	std::string direction;
 	switch (settings.isReversed) {
 	case false: direction = "по ВОЗРАСТАНИЮ"; break;
-	case true: direction ="по УБЫВАНИЮ"; break;
+	case true: direction = "по УБЫВАНИЮ"; break;
 	}
 
 	top = top + "<body><h2>" + "Сортировка по полю " + fieldName + " " + direction + "</h2>";
@@ -138,7 +140,7 @@ void createSortedFile(const std::string& file) {
 	std::cout << "Ваш файл под названием " << settings.name << ".html" << " был создан" << std::endl;
 }
 
-std::string row(const book & doc) {
+std::string row(const book& doc) {
 	std::string res;
 	res = res + "<tr>";
 	res = res + "<td>" + doc.name + "</td>";
@@ -182,15 +184,6 @@ std::string row(const book& doc, typeField mainField) {
 		res = res + "<td>" + line + "</td>";
 	}
 	res = res + "</tr>\n";
-
-	//res = res + "<tr>";
-	//res = res + "<td>" + doc.name + "</td>";
-	//res = res + "<td>" + doc.kind + "</td>";
-	//res = res + "<td>" + doc.organization + "</td>";
-	//res = res + "<td>" + doc.year + "</td>";
-	//res = res + "<td>" + doc.address + "</td>";
-	//res = res + "<td>" + doc.surname + "</td>";
-	//res = res + "</tr>";
 
 	return res;
 }
@@ -299,7 +292,7 @@ std::vector<book> readFile(const std::string& file) {
 	std::fstream fileStream;
 	fileStream.open(file, std::ios_base::in);
 
-	fileStream.ignore(2056,'\n');
+	fileStream.ignore(2056, '\n');
 
 	while (!fileStream.eof()) {
 		std::string buffRow;
@@ -328,7 +321,7 @@ book splitRow(std::string row) {
 	for (auto& field : buff) {
 		field = row.substr(leftEdge, end - beg);
 		row.erase(0, end + rigthEdge);
-		
+
 		end = row.find("</td>");
 	}
 
@@ -342,7 +335,7 @@ book splitRow(std::string row) {
 	return res;
 }
 
-void insertionSort(std::vector<book> &books, sortingSettings set) {
+void insertionSort(std::vector<book>& books, sortingSettings set) {
 	for (int counter = 0; counter < books.size(); counter++) {
 		book currentBook = books[counter];
 		int j = counter - 1;
@@ -356,43 +349,49 @@ void insertionSort(std::vector<book> &books, sortingSettings set) {
 
 //@return равносильно знаку >
 bool naturalComparisonGreater(book book1, book book2, sortingSettings set) {
-	bool res (false);
+	bool res(false);
 
 	std::string str1, str2;
 
 	//Передача поля, по которому идет сортировка
 	switch (set.field) {
-	case name: {
+	case name:
+	{
 		str1 = book1.name;
 		str2 = book2.name;
 		break;
 	}
-	case kind: {
+	case kind:
+	{
 		str1 = book1.kind;
 		str2 = book2.kind;
 		break;
 	}
-	case organization: {
+	case organization:
+	{
 		str1 = book1.organization;
 		str2 = book2.organization;
 		break;
 	}
-	case year: {
+	case year:
+	{
 		str1 = book1.year;
 		str2 = book2.year;
 		break;
 	}
-	case address: {
+	case address:
+	{
 		str1 = book1.address;
 		str2 = book2.address;
 		break;
 	}
-	case surname: {
+	case surname:
+	{
 		str1 = book1.surname;
 		str2 = book2.surname;
 		break;
 	}
-	defautl: break;
+defautl: break;
 	}
 	std::string empty = "None";
 	if (str1 == empty)
