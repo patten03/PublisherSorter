@@ -411,9 +411,9 @@ defautl: break;
 
 	// настройка для сортировки в обратном порядке
 	if (set.isReversed)
-		return !res;
-	else
 		return res;
+	else
+		return !res;
 }
 
 void checkSpecialSymbols(const std::string& word) {
