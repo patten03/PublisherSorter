@@ -12,6 +12,7 @@
 #include <algorithm>
 #include "DirWork.h"
 
+// список полей из таблицы
 enum typeField {
 	name = 1,
 	kind,
@@ -21,12 +22,14 @@ enum typeField {
 	surname
 };
 
+// настройки создания файлов
 struct sortingSettings {
 	typeField field;
 	bool isReversed;
 	std::string name;
 };
 
+// структура полей
 struct book {
 	std::string name;
 	std::string kind;
@@ -36,28 +39,28 @@ struct book {
 	std::string surname;
 };
 
-void menu();
+void menu(); // вывод главного меню для пользователя с вступлением
 
-void ask(const std::vector<std::string> choice);
-int inputChoice(const int& end);
-void checkSpecialSymbols(const std::string& word);
-std::string askString(const std::string& question);
-void createSortedFile(const std::string& file);
-sortingSettings setNewFile(const std::string& file);
-void fixFile(const std::string& file);
-std::vector<book> readFile(const std::string& file);
-book splitRow(std::string row);
-void insertionSort(std::vector<book>& books, sortingSettings set);
-bool naturalComparisonGreater(book book1, book book2, sortingSettings set);
+void ask(const std::vector<std::string> choice);    // вывод списка действий в консоль
+int inputChoice(const int& end);                    // реагирование на выбор пользователя действий
+void checkSpecialSymbols(const std::string& word);  // проверка названия файла на спец символы
+std::string askString(const std::string& question); // запрос у пользователя названия файла
 
-std::string headerRow();
-std::string headerRow(typeField mainField);
-std::string row(const book& doc);
-std::string row(const book& doc, typeField mainField);
+void createSortedFile(const std::string& file);      // отвечает за выбор параметров файла пользователем и создает файл
+sortingSettings setNewFile(const std::string& file); // выбор настроек сортировки пользователем
+void fixFile(const std::string& file);               // преобразование исходной html таблицы в читаймый для программы вид
+std::vector<book> readFile(const std::string& file); // вынесение всей информации из таблицы в vector
+book splitRow(std::string row);                      // выделение из html таблицы строки и преобразование данных в удобную структуру
 
-std::string swapFields(std::vector<std::string> fieldList, typeField mainField);
+void insertionSort(std::vector<book>& books, sortingSettings set);          // сортировка вставкой на основе настроек пользователя
+bool naturalComparisonGreater(book book1, book book2, sortingSettings set); // лексикографическое сравнение элементов с учетом отсутсвия данных
+
+std::string headerRow(typeField mainField);            // название полей таблицы html
+std::string row(const book& doc, typeField mainField); // выводимая в html таблицу строка
+
+std::string swapFields(std::vector<std::string> fieldList, typeField mainField); // установка в первый столбец отсортированного поля
 
 
-void standartSettings();
+void standartSettings(); // устанока русской кодировки
 
 #endif // !SORTING

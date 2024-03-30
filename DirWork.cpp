@@ -1,11 +1,14 @@
 #include "DirWork.h"
 
+//@brief вывод списка файлов в консоль для их выбора пользователем 
 void showDir(const std::vector<std::string>& dir) {
 	for (const auto& item : dir) {
 		std::cout << "  " << item << std::endl;
 	}
 }
 
+//@brief выбор файла через консоль пользователем
+//@return возврат выбранного файла в виде строки
 std::string findFile(std::string title) {
 	std::filesystem::path p = "."; // получение пути, где находится программа
 	std::string curFilepath = std::filesystem::absolute(p).string();
@@ -44,6 +47,7 @@ std::string findFile(std::string title) {
 	return curFilepath;
 }
 
+//@brife реализация меню выбора для findFile()
 void fileChoice(int begCoord, std::vector<std::string> files, int& cur, std::string& filepath) {
 	movingArrow(begCoord, begCoord + files.size(), cur, 0); // показ стрелки выбора папки  
 
@@ -74,6 +78,7 @@ void fileChoice(int begCoord, std::vector<std::string> files, int& cur, std::str
 	}
 }
 
+//@brief проверка на то, является ли файл отсортированным через название файла
 bool isSorted(const std::string& filename) {
 	bool res(false);
 	// нахождение метки в названии файла
@@ -82,6 +87,7 @@ bool isSorted(const std::string& filename) {
 	return res;
 }
 
+//@brief создание списка файлов из директории, лежащей в программе
 void makeFilesList(std::string filepath, std::vector<std::string>& folderList) {
 	for (auto const& dirFolder : std::filesystem::directory_iterator(filepath + "\\")) {
 		{ // цикл сохраняет файлы html без меток {s}
@@ -98,6 +104,7 @@ void makeFilesList(std::string filepath, std::vector<std::string>& folderList) {
 	}
 }
 
+//@brife передвижение стрелки для выбора файлом пользователем
 int movingArrow(int ymin, int ymax, int cur, int key) {
 	DWORD dw;
 	COORD here{ 0, cur }; // координата стрелки в консоли (y - идет сверху вниз)
@@ -122,6 +129,7 @@ int movingArrow(int ymin, int ymax, int cur, int key) {
 	return here.Y;
 }
 
+//@return возвращает название файла вместе с датой и времени для предотвращение перезаписи
 std::string askName() {
 	std::string filename = askString("введите название файла");
 
@@ -135,11 +143,13 @@ std::string askName() {
 	return fullPath;
 }
 
+//@return замена всех пробелов на нижние подчеркивания
 std::string space2underscore(std::string text) {
 	std::replace(text.begin(), text.end(), ' ', '_');
 	return text;
 }
 
+//@return получение времени на момент создания файла для предотвращения перезаписи
 std::string currentTime() {
 	std::string res;
 
@@ -164,6 +174,7 @@ std::string currentTime() {
 	return res;
 }
 
+//@return форматирование даты и времени
 std::string formatXX(int num) {
 	if (num < 10)
 		return "0" + std::to_string(num);

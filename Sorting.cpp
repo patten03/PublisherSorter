@@ -7,6 +7,7 @@ void standartSettings() {
 	std::setlocale(LC_ALL, "ru");
 }
 
+//@brief вывод главного меню с вступлением и инструкцией
 void menu() {
 	std::cout << "Добро пожаловать в программу PublisherSorter" << std::endl << std::endl
 		<< "Программа позволяет обрабатывать таблицы HTML с информацией об изданиях" << std::endl
@@ -29,13 +30,13 @@ void menu() {
 			"Выбор файла",
 			"Выход из программы"
 		};
-		ask(menuPanel);
+		ask(menuPanel); // вывод действий в консоль для их выбора пользователем
 		int choice = inputChoice(menuPanel.size());
 
 		std::string file;
+		// реакция на выбор действия пользователем
 		switch (choice) {
-		case 1:
-		{
+		case 1: { // вход в меню выбора файла
 			file = findFile("Выберите файл:");
 			if (file != "") {
 				fixFile(file);
@@ -43,8 +44,7 @@ void menu() {
 			}
 			break;
 		}
-		case 2:
-		{
+		case 2: {
 			quit = true;
 			break;
 		}
@@ -54,12 +54,14 @@ void menu() {
 	}
 }
 
+//@brief вывод списка действий в консоль
 void ask(const std::vector<std::string> choice) {
 	for (int i(0); i < choice.size(); i++) {
 		std::cout << i + 1 << ". " << choice[i] << std::endl;
 	}
 }
 
+//@brief реагирование на выбор пользователя действий
 int inputChoice(const int& end) {
 	int choiceInt = _getch();
 
@@ -72,6 +74,7 @@ int inputChoice(const int& end) {
 	return choiceInt;
 }
 
+//@return возврат выбранного пользователем названия файла, предотвращая ввод запрещенных символов
 std::string askString(const std::string& question) {
 	std::string res;
 	std::cout << question << std::endl;
@@ -98,16 +101,16 @@ std::string askString(const std::string& question) {
 }
 
 void createSortedFile(const std::string& file) {
-	sortingSettings settings = setNewFile(file);
-	std::vector<book> books = readFile(file);
-	insertionSort(books, settings);
+	sortingSettings settings = setNewFile(file); // выбор настроек сортировки для файла
+	std::vector<book> books = readFile(file);    // считывание данных из входного файла
+	insertionSort(books, settings);              // сортировка полученных данных на основе настроек
 
 	std::fstream res;
 	res.open(settings.name + ".html", std::ios_base::out);
 
 	std::string top("<!DOCTYPE html><html>");
 
-	std::string fieldName;
+	std::string fieldName; // название поля, по которому отсортирован файл
 	switch (settings.field) {
 	case name: fieldName = "НАЗВАНИЕ ИЗДАНИЯ"; break;
 	case kind: fieldName = "ВИД ИЗДАНИЯ"; break;
@@ -117,7 +120,7 @@ void createSortedFile(const std::string& file) {
 	case surname: fieldName = "ФАМИЛИЯ ГЛАВНОГО РЕДАКТОРА"; break;
 	}
 
-	std::string direction;
+	std::string direction; // направление, по которому был отсортирован файл
 	switch (settings.isReversed) {
 	case false: direction = "по ВОЗРАСТАНИЮ"; break;
 	case true: direction = "по УБЫВАНИЮ"; break;
@@ -128,7 +131,7 @@ void createSortedFile(const std::string& file) {
 
 	res << top << headerRow(settings.field);
 
-	for (auto const& curBook : books) {
+	for (auto const& curBook : books) { // вывод отсортированных данных в файл
 		res << row(curBook, settings.field) << std::endl;
 	}
 
@@ -165,6 +168,7 @@ std::string headerRow() {
 	return res;
 }
 
+//@return вывод объекта данных в виде строки в html
 std::string row(const book& doc, typeField mainField) {
 
 	std::vector<std::string> fieldList{
@@ -188,6 +192,7 @@ std::string row(const book& doc, typeField mainField) {
 	return res;
 }
 
+//@return вывод названия полей в виде строки в html
 std::string headerRow(typeField mainField) {
 	std::vector<std::string> fieldList{
 		"Название издания",
