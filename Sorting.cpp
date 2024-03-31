@@ -147,31 +147,6 @@ void createSortedFile(const std::string& file) {
 	std::cout << "Ваш файл под названием " << settings.name << ".html" << " был создан" << std::endl;
 }
 
-std::string row(const book& doc) {
-	std::string res;
-	res = res + "<tr>";
-	res = res + "<td>" + doc.name + "</td>";
-	res = res + "<td>" + doc.kind + "</td>";
-	res = res + "<td>" + doc.organization + "</td>";
-	res = res + "<td>" + doc.year + "</td>";
-	res = res + "<td>" + doc.address + "</td>";
-	res = res + "<td>" + doc.surname + "</td>";
-	res = res + "</tr>";
-
-	return res;
-}
-
-std::string headerRow() {
-	std::string res;
-	res = res + "<th>" + "Название издания" + "</th>";
-	res = res + "<th>" + "Вид издания" + "</th>";
-	res = res + "<th>" + "Издающая организация" + "</th>";
-	res = res + "<th>" + "Год издания" + "</th>";
-	res = res + "<th>" + "Адресс редакции" + "</th>";
-	res = res + "<th>" + "Фамилия главного редактора" + "</th>" + "\n";
-	return res;
-}
-
 //@return вывод объекта данных в виде строки в html
 std::string row(const book& doc, typeField mainField) {
 
@@ -263,7 +238,7 @@ sortingSettings setNewFile(const std::string& file) {
 	// выбор названия файла
 	res.name = askString("Введите название файла");
 	res.name = res.name + "_" + currentTime() + "_{s}";
-	space2underscore(res.name);
+	res.name = space2underscore(res.name);
 
 	return res;
 }

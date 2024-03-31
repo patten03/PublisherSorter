@@ -60,7 +60,6 @@ std::string row(const book& doc, typeField mainField); // выводимая в html табли
 
 std::string swapFields(std::vector<std::string> fieldList, typeField mainField); // установка в первый столбец отсортированного поля
 
-
 void standartSettings(); // устанока русской кодировки
 
 #endif // !SORTING
