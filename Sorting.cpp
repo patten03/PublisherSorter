@@ -1,5 +1,6 @@
 #include "Sorting.h"
 
+//@brief настройка консоли
 void standartSettings() {
 	// установка русской кодировки для консоли
 	SetConsoleCP(1251);
@@ -36,7 +37,8 @@ void menu() {
 		std::string file;
 		// реакция на выбор действия пользователем
 		switch (choice) {
-		case 1: { // вход в меню выбора файла
+		case 1:
+		{ // вход в меню выбора файла
 			file = findFile("Выберите файл:");
 			if (file != "") {
 				fixFile(file);
@@ -44,7 +46,8 @@ void menu() {
 			}
 			break;
 		}
-		case 2: {
+		case 2:
+		{
 			quit = true;
 			break;
 		}
@@ -93,7 +96,7 @@ std::string askString(const std::string& question) {
 			}
 		}
 		catch (std::exception& ex) {
-			std::cout << ex.what() << std::endl;
+			std::cout << ex.what() << std::endl; // вывод ошибки в консоль
 		}
 	}
 	system("cls");
@@ -126,6 +129,7 @@ void createSortedFile(const std::string& file) {
 	case true: direction = "по УБЫВАНИЮ"; break;
 	}
 
+	// создание заголовка для файла, где пишутся параметры сортировки
 	top = top + "<body><h2>" + "Сортировка по полю " + fieldName + " " + direction + "</h2>";
 	top = top + "<style> table, th, td{ border:1px solid black; }</style><table>";
 
@@ -214,8 +218,9 @@ std::string headerRow(typeField mainField) {
 	return res;
 }
 
+//@brief перестановка названий полей для установки сортируемого столбца в крайнее левое положение
 std::string swapFields(std::vector<std::string> fieldList, typeField mainField) {
-	fieldList[0].swap(fieldList[mainField - 1]);
+	fieldList[0].swap(fieldList[mainField - 1]); // перестановка первого поля с требуемым полем
 
 	std::string res;
 	for (auto line : fieldList) {
@@ -226,9 +231,14 @@ std::string swapFields(std::vector<std::string> fieldList, typeField mainField) 
 	return res;
 }
 
+/*@return выбор настроек пользователем, таких как:
+  поле, по которому происходит сортировка;
+  выбор направления сортировки;
+  название файла;*/
 sortingSettings setNewFile(const std::string& file) {
 	sortingSettings res;
 
+	// выбор сортируемого поля
 	std::cout << "Выберите поле, по которому будете сортировать таблицу:" << std::endl;
 	std::vector<std::string> fields{
 		"Название издания",
@@ -241,6 +251,7 @@ sortingSettings setNewFile(const std::string& file) {
 	ask(fields);
 	res.field = typeField(inputChoice(fields.size()));
 
+	// выбор направления сортировки
 	std::cout << "Выберите направление сортировки" << std::endl;
 	std::vector<std::string> direction{
 		"Сортировка по возрастанию",
@@ -249,6 +260,7 @@ sortingSettings setNewFile(const std::string& file) {
 	ask(direction);
 	res.isReversed = bool(inputChoice(direction.size()) - 1);
 
+	// выбор названия файла
 	res.name = askString("Введите название файла");
 	res.name = res.name + "_" + currentTime() + "_{s}";
 	space2underscore(res.name);
@@ -262,13 +274,13 @@ void fixFile(const std::string& file) {
 
 	// Требуется ли обрабатывать файл
 	std::string check;
-	raw.ignore(246 - 1, '\n'); // 246 - длинна "шапки" файла
+	raw.ignore(245, '\n'); // 246 - длинна "шапки" файла
 	std::getline(raw, check, '\n');
 
 	raw.clear();
 	raw.seekg(0);
 
-	if (check != "") {
+	if (check != "") { // если check != "", значит файл состоит из одной строки и его надо корректировать
 		fixed.open("temp.html", std::ios_base::out);
 		while (!raw.eof()) {
 			std::string buff;
@@ -285,21 +297,23 @@ void fixFile(const std::string& file) {
 		raw.close();
 		fixed.close();
 
+		// замена изначального файла на исправленный
 		std::string filename = file.substr(file.rfind('\\') + 1, file.length());
 		system(("del \"" + filename + "\"").c_str());
 		system(("ren temp.html \"" + filename + "\"").c_str());
 	}
 }
 
+//@return запись всех данных в вектор для последующей сортировки
 std::vector<book> readFile(const std::string& file) {
 	std::vector<book> res;
 
 	std::fstream fileStream;
 	fileStream.open(file, std::ios_base::in);
 
-	fileStream.ignore(2056, '\n');
+	fileStream.ignore(2056, '\n'); // игнорирование первой строки файла, где отстутвуют данные 
 
-	while (!fileStream.eof()) {
+	while (!fileStream.eof()) { // полное чтение файла
 		std::string buffRow;
 		std::getline(fileStream, buffRow);
 		book buffBook = splitRow(buffRow);
@@ -311,9 +325,11 @@ std::vector<book> readFile(const std::string& file) {
 	return res;
 }
 
+//@return разбиение html строки на поля для структуры book
 book splitRow(std::string row) {
 	book res;
 
+	// индексы, по которым обрезаются поля из строки
 	int beg, end;
 	int leftEdge = std::string("<td>").length();
 	int rigthEdge = std::string("</td>").length();
@@ -330,6 +346,7 @@ book splitRow(std::string row) {
 		end = row.find("</td>");
 	}
 
+	// создание оконачательного объекта структуры
 	res.name = buff[0];
 	res.kind = buff[1];
 	res.organization = buff[2];
@@ -340,6 +357,8 @@ book splitRow(std::string row) {
 	return res;
 }
 
+//@brief сортировка данных методом вставки 
+//@return отсортированные объекты, учитывае поле сортировки
 void insertionSort(std::vector<book>& books, sortingSettings set) {
 	for (int counter = 0; counter < books.size(); counter++) {
 		book currentBook = books[counter];
@@ -416,6 +435,7 @@ defautl: break;
 		return !res;
 }
 
+//@brief проверка вводимого названия файла на специальные символы 
 void checkSpecialSymbols(const std::string& word) {
 	std::string forbiddenSymbols("\\/:*?<>\"|");
 	for (int i(0); i < forbiddenSymbols.size(); i++) {
