@@ -129,20 +129,6 @@ int movingArrow(int ymin, int ymax, int cur, int key) {
 	return here.Y;
 }
 
-//@return возвращает название файла вместе с датой и времени для предотвращение перезаписи
-std::string askName() {
-	std::string filename = askString("введите название файла");
-
-	filename = space2underscore(filename);
-	filename = filename + "_" + currentTime();
-
-	std::string fullPath = filename + ".html";
-
-	system("cls");
-	std::cout << "‘айл под названием " << filename << ".html создан!" << std::endl;
-	return fullPath;
-}
-
 //@return замена всех пробелов на нижние подчеркивания
 std::string space2underscore(std::string text) {
 	std::replace(text.begin(), text.end(), ' ', '_');

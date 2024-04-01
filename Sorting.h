@@ -44,7 +44,9 @@ void menu(); // вывод главного меню дл€ пользовател€ с вступлением
 void ask(const std::vector<std::string> choice);    // вывод списка действий в консоль
 int inputChoice(const int& end);                    // реагирование на выбор пользовател€ действий
 void checkSpecialSymbols(const std::string& word);  // проверка названи€ файла на спец символы
-std::string askString(const std::string& question); // запрос у пользовател€ названи€ файла
+
+std::string askName();                              // получение название файла от пользовател€ и енр преобразование
+std::string askString(const std::string& question); // запрос у пользовател€ названи€ файла и проверка на нелегальные символы
 
 void createSortedFile(const std::string& file);      // отвечает за выбор параметров файла пользователем и создает файл
 sortingSettings setNewFile(const std::string& file); // выбор настроек сортировки пользователем

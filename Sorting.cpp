@@ -103,6 +103,20 @@ std::string askString(const std::string& question) {
 	return res;
 }
 
+//@return возвращает название файла вместе с датой и времени дл€ предотвращение перезаписи
+std::string askName() {
+	std::string filename = askString("введите название файла");
+
+	filename = space2underscore(filename);
+	filename = filename + "_" + currentTime();
+
+	std::string fullPath = filename + ".html";
+
+	system("cls");
+	std::cout << "Сайл под названием " << filename << ".html создан!" << std::endl;
+	return fullPath;
+}
+
 void createSortedFile(const std::string& file) {
 	sortingSettings settings = setNewFile(file); // выбор настроек сортировки дл€ файла
 	std::vector<book> books = readFile(file);    // считывание данных из входного файла
