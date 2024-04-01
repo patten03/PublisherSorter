@@ -60,8 +60,6 @@ bool naturalComparisonGreater(book book1, book book2, sortingSettings set); // л
 std::string headerRow(typeField mainField);            // название полей таблицы html
 std::string row(const book& doc, typeField mainField); // выводимая в html таблицу строка
 
-std::string swapFields(std::vector<std::string> fieldList, typeField mainField); // установка в первый столбец отсортированного поля
-
 void standartSettings(); // устанока русской кодировки
 
 #endif // !SORTING

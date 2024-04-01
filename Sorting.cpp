@@ -207,19 +207,6 @@ std::string headerRow(typeField mainField) {
 	return res;
 }
 
-//@brief перестановка названий полей для установки сортируемого столбца в крайнее левое положение
-std::string swapFields(std::vector<std::string> fieldList, typeField mainField) {
-	fieldList[0].swap(fieldList[mainField - 1]); // перестановка первого поля с требуемым полем
-
-	std::string res;
-	for (auto line : fieldList) {
-		res = res + "<th>" + line + "</th>";
-	}
-	res = res + "\n";
-
-	return res;
-}
-
 /*@return выбор настроек пользователем, таких как:
   поле, по которому происходит сортировка;
   выбор направления сортировки;
