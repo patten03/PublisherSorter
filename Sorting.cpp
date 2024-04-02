@@ -105,7 +105,7 @@ std::string askString(const std::string& question) {
 
 //@return возвращает название файла вместе с датой и времени для предотвращение перезаписи
 std::string askName() {
-	std::string filename = askString("введите название файла");
+	std::string filename = askString("Введите название файла");
 
 	filename = space2underscore(filename);
 	filename = filename + "_" + currentTime();
@@ -113,7 +113,7 @@ std::string askName() {
 	std::string fullPath = filename + ".html";
 
 	system("cls");
-	std::cout << "‘айл под названием " << filename << ".html создан!" << std::endl;
+	std::cout << "Файл под названием " << filename << ".html создан!" << std::endl;
 	return fullPath;
 }
 
@@ -416,6 +416,6 @@ void checkSpecialSymbols(const std::string& word) {
 	std::string forbiddenSymbols("\\/:*?<>\"|");
 	for (int i(0); i < forbiddenSymbols.size(); i++) {
 		if (word.find(forbiddenSymbols[i]) != -1)
-			throw std::invalid_argument("Файл не может содержать \\/:*?<>\"|");
+			throw std::invalid_argument("Название файла не может содержать \\/:*?<>\"|");
 	}
 }

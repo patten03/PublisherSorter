@@ -19,7 +19,7 @@ std::string findFile(std::string title) {
 			std::vector<std::string> fileList;
 			makeFilesList(curFilepath, fileList);
 			if (fileList.size() == 0)
-				throw std::invalid_argument("директория пуста, ни одного файла не найдено");
+				throw std::invalid_argument("Директория пуста, ни одного файла не найдено");
 			std::cout << title << std::endl;
 
 			std::vector<std::string> menu{
