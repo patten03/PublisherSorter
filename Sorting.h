@@ -45,8 +45,7 @@ void ask(const std::vector<std::string> choice);    // вывод списка действий в к
 int inputChoice(const int& end);                    // реагирование на выбор пользователя действий
 void checkSpecialSymbols(const std::string& word);  // проверка названия файла на спец символы
 
-std::string askName();                              // получение название файла от пользователя и енр преобразование
-std::string askString(const std::string& question); // запрос у пользователя названия файла и проверка на нелегальные символы
+std::string askName(const std::string& question);   // запрос у пользователя названия файла и проверка на нелегальные символы
 
 void createSortedFile(const std::string& file);      // отвечает за выбор параметров файла пользователем и создает файл
 sortingSettings setNewFile(const std::string& file); // выбор настроек сортировки пользователем

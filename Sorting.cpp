@@ -78,7 +78,7 @@ int inputChoice(const int& end) {
 }
 
 //@return возврат выбранного пользователем названи€ файла, предотвраща€ ввод запрещенных символов
-std::string askString(const std::string& question) {
+std::string askName(const std::string& question) {
 	std::string res;
 	std::cout << question << std::endl;
 
@@ -101,20 +101,6 @@ std::string askString(const std::string& question) {
 	}
 	system("cls");
 	return res;
-}
-
-//@return возвращает название файла вместе с датой и времени дл€ предотвращение перезаписи
-std::string askName() {
-	std::string filename = askString("¬ведите название файла");
-
-	filename = space2underscore(filename);
-	filename = filename + "_" + currentTime();
-
-	std::string fullPath = filename + ".html";
-
-	system("cls");
-	std::cout << "‘айл под названием " << filename << ".html создан!" << std::endl;
-	return fullPath;
 }
 
 void createSortedFile(const std::string& file) {
@@ -237,7 +223,7 @@ sortingSettings setNewFile(const std::string& file) {
 	res.isReversed = bool(inputChoice(direction.size()) - 1);
 
 	// выбор названи€ файла
-	res.name = askString("¬ведите название файла");
+	res.name = askName("¬ведите название файла");
 	res.name = res.name + "_" + currentTime() + "_{s}";
 	res.name = space2underscore(res.name);
 
