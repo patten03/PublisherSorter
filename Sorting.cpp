@@ -105,46 +105,50 @@ std::string askName(const std::string& question) {
 
 void createSortedFile(const std::string& file) {
 	sortingSettings settings = setNewFile(file); // выбор настроек сортировки для файла
-	std::vector<book> books = readFile(file);    // считывание данных из входного файла
-	insertionSort(books, settings);              // сортировка полученных данных на основе настроек
 
-	std::fstream res;
-	res.open(settings.name + ".html", std::ios_base::out);
+	// проверка на то, захотел ли пользователь выйти из выбора названия файла
+	if (settings.name != quitSymbol) {
+		std::vector<book> books = readFile(file);    // считывание данных из входного файла
+		insertionSort(books, settings);              // сортировка полученных данных на основе настроек
 
-	std::string top("<!DOCTYPE html><html>");
+		std::fstream res;
+		res.open(settings.name + ".html", std::ios_base::out);
 
-	std::string fieldName; // название поля, по которому отсортирован файл
-	switch (settings.field) {
-	case name: fieldName = "НАЗВАНИЕ ИЗДАНИЯ"; break;
-	case kind: fieldName = "ВИД ИЗДАНИЯ"; break;
-	case organization: fieldName = "ИЗДАЮЩАЯ ОРГАНИЗАЦИЯ"; break;
-	case year: fieldName = "ГОД ИЗДАНИЯ"; break;
-	case address: fieldName = "АДРЕС РЕДАКЦИИ"; break;
-	case surname: fieldName = "ФАМИЛИЯ ГЛАВНОГО РЕДАКТОРА"; break;
+		std::string top("<!DOCTYPE html><html>");
+
+		std::string fieldName; // название поля, по которому отсортирован файл
+		switch (settings.field) {
+		case name: fieldName = "НАЗВАНИЕ ИЗДАНИЯ"; break;
+		case kind: fieldName = "ВИД ИЗДАНИЯ"; break;
+		case organization: fieldName = "ИЗДАЮЩАЯ ОРГАНИЗАЦИЯ"; break;
+		case year: fieldName = "ГОД ИЗДАНИЯ"; break;
+		case address: fieldName = "АДРЕС РЕДАКЦИИ"; break;
+		case surname: fieldName = "ФАМИЛИЯ ГЛАВНОГО РЕДАКТОРА"; break;
+		}
+
+		std::string direction; // направление, по которому был отсортирован файл
+		switch (settings.isReversed) {
+		case false: direction = "по ВОЗРАСТАНИЮ"; break;
+		case true: direction = "по УБЫВАНИЮ"; break;
+		}
+
+		// создание заголовка для файла, где пишутся параметры сортировки
+		top = top + "<body><h2>" + "Сортировка по полю " + fieldName + " " + direction + "</h2>";
+		top = top + "<style> table, th, td{ border:1px solid black; }</style><table>";
+
+		res << top << headerRow(settings.field);
+
+		for (auto const& curBook : books) { // вывод отсортированных данных в файл
+			res << row(curBook, settings.field) << std::endl;
+		}
+
+		std::string floor("</table></body>");
+		res << floor;
+
+		res.close();
+
+		std::cout << "Ваш файл под названием " << settings.name << ".html" << " был создан" << std::endl;
 	}
-
-	std::string direction; // направление, по которому был отсортирован файл
-	switch (settings.isReversed) {
-	case false: direction = "по ВОЗРАСТАНИЮ"; break;
-	case true: direction = "по УБЫВАНИЮ"; break;
-	}
-
-	// создание заголовка для файла, где пишутся параметры сортировки
-	top = top + "<body><h2>" + "Сортировка по полю " + fieldName + " " + direction + "</h2>";
-	top = top + "<style> table, th, td{ border:1px solid black; }</style><table>";
-
-	res << top << headerRow(settings.field);
-
-	for (auto const& curBook : books) { // вывод отсортированных данных в файл
-		res << row(curBook, settings.field) << std::endl;
-	}
-
-	std::string floor("</table></body>");
-	res << floor;
-
-	res.close();
-
-	std::cout << "Ваш файл под названием " << settings.name << ".html" << " был создан" << std::endl;
 }
 
 //@return вывод объекта данных в виде строки в html
@@ -223,10 +227,12 @@ sortingSettings setNewFile(const std::string& file) {
 	res.isReversed = bool(inputChoice(direction.size()) - 1);
 
 	// выбор названия файла
-	res.name = askName("Введите название файла");
-	res.name = res.name + "_" + currentTime() + "_{s}";
-	res.name = space2underscore(res.name);
+	res.name = askName("Введите название файла, для выхода из ввода названия введите " + quitSymbol);
 
+	if (res.name != quitSymbol) { // если пользователь не ввел символ выхода из выбора названия
+		res.name = res.name + "_" + currentTime() + "_{s}";
+		res.name = space2underscore(res.name);
+	}
 	return res;
 }
 

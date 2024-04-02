@@ -12,6 +12,9 @@
 #include <algorithm>
 #include "DirWork.h"
 
+// символ выхода из выбора названия
+const std::string quitSymbol = "0";
+
 // список полей из таблицы
 enum typeField {
 	name = 1,
